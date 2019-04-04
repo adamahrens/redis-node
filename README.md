@@ -63,3 +63,53 @@ redis> lrange movies 0 1
 
 #### Sets
 Have plain sets and ordered sets `sadd` vs `zadd`. Can then perform common set operations such as union, diff, intersection
+
+#### Storing Structures
+
+```
+127.0.0.1:6379> hmset user:1 username adam email blah@blah.com
+OK
+127.0.0.1:6379> hmset user:2 username josh email blah2@blah.com
+OK
+127.0.0.1:6379> hmset user:3 username leroy email jenkins@blah.com
+OK
+127.0.0.1:6379> hgetall user:1
+1) "username"
+2) "adam"
+3) "email"
+4) "blah@blah.com"
+127.0.0.1:6379> hgetall user:2
+1) "username"
+2) "josh"
+3) "email"
+4) "blah2@blah.com"
+127.0.0.1:6379> hgetall user:3
+1) "username"
+2) "leroy"
+3) "email"
+4) "jenkins@blah.com"
+127.0.0.1:6379> 
+```
+
+Now lets say we wanted to lookup by usernames. Lets add another structure to refer back to the hashes
+```
+127.0.0.1:6379> set username:adam user:1
+OK
+127.0.0.1:6379> set username:josh user:2
+OK
+127.0.0.1:6379> set username:leroy user:3
+OK
+127.0.0.1:6379> 
+```
+
+With this new index we can do a lookupfor the key that refers to a username (for example of a signup form uses a username field)
+
+```
+127.0.0.1:6379> get username:adam
+"user:1"
+127.0.0.1:6379> hgetall user:1
+1) "username"
+2) "adam"
+3) "email"
+4) "blah@blah.com"
+127.0.0.1:6379> ```
