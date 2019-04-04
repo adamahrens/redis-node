@@ -112,4 +112,28 @@ With this new index we can do a lookupfor the key that refers to a username (for
 2) "adam"
 3) "email"
 4) "blah@blah.com"
-127.0.0.1:6379> ```
+127.0.0.1:6379>
+```
+
+# Redis messaging
+
+Simple messaging provided by PUB/SUB. Too subscribe you use `subscribe channel_name` so `subscribe user:created`. Also has `psubscribe` for pattern matching.
+
+```
+127.0.0.1:6379> subscribe movies
+
+127.0.0.1:6379> publish movies "The Big Lebowski"
+(integer) 1
+127.0.0.1:6379> publish movies "The Matrix"
+(integer) 1
+
+1) "subscribe"
+2) "movies"
+3) (integer) 1
+1) "message"
+2) "movies"
+3) "The Big Lebowski"
+1) "message"
+2) "movies"
+3) "The Matrix"
+```
