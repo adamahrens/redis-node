@@ -3,6 +3,10 @@ A NodeJS application with Socket.io and redis
 
 # Common redis commands
 
+#### Start
+`redis-server` to start a redis server
+`redis-cli` to connect to a redis server via the commandline
+
 #### Set
 `set key value` e.g. `set leroy jenkins`
 
