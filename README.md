@@ -92,7 +92,7 @@ OK
 2) "leroy"
 3) "email"
 4) "jenkins@blah.com"
-127.0.0.1:6379> 
+127.0.0.1:6379>
 ```
 
 Now lets say we wanted to lookup by usernames. Lets add another structure to refer back to the hashes
@@ -103,7 +103,7 @@ OK
 OK
 127.0.0.1:6379> set username:leroy user:3
 OK
-127.0.0.1:6379> 
+127.0.0.1:6379>
 ```
 
 With this new index we can do a lookupfor the key that refers to a username (for example of a signup form uses a username field)
@@ -140,4 +140,10 @@ Simple messaging provided by PUB/SUB. Too subscribe you use `subscribe channel_n
 1) "message"
 2) "movies"
 3) "The Matrix"
+```
+
+# Socket.io
+`io()` in browser console to connect a websocket
+```
+socket connection is open
 ```

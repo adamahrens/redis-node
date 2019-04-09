@@ -18,6 +18,20 @@
     <h5>Total Redis Connections <%= count %></h5>
   </main>
 
+  <main role="socket" class="container mt-5 pt-5">
+    <h1>Socket.io</h1>
+    <script src='/socket.io/socket.io.js'></script>
+    <script>
+    <!-- Whenever we get a socketping we send a socketpong back -->
+      var socket = io();
+      socket.emit('socketping');
+      socket.on('socketpong', () => {
+        console.log('Got socketpong');
+        setTimeout(() => socket.emit('socketping'), 5000);
+      });
+    </script>
+  </main>
+
   <footer>
     <div class="container">
        <span class="text-muted">Redis-Node <%= new Date().getFullYear() %></span>
