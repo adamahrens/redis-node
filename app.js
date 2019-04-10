@@ -7,6 +7,9 @@ var sub     = redis.createClient(config.port, config.host);
 var app     = express();
 var server  = require('http').createServer(app);
 var io      = require('socket.io')(server);
+
+// io will know about all other Connections
+// socket is simply one connection with one browser
 io.on('connection', (socket) => {
   console.log('socket connection is open')
 
@@ -15,8 +18,13 @@ io.on('connection', (socket) => {
     console.log('Got socketping. Sending socketpong');
     socket.emit('socketpong');
   });
+
+  socket.on('name', (name) => {
+    console.log(name + ' says hello');
+    io.emit('name', name);
+  });
 });
-server.listen(3000);
+server.listen(3002);
 
 client.set('redis_connections', '0');
 
