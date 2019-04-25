@@ -147,3 +147,11 @@ Simple messaging provided by PUB/SUB. Too subscribe you use `subscribe channel_n
 ```
 socket connection is open
 ```
+
+# Using Rooms and Namespaces (Socket.io features)
+
+An area to group clients. Treat (listen, emit, and broadcast) room as it's own socket.io
+
+`socket.join(name_of_room);`
+
+Clients know when connecting to a namespace. Namespace is a separate instance of socket.io.

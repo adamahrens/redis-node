@@ -11,7 +11,16 @@ var io      = require('socket.io')(server);
 // io will know about all other Connections
 // socket is simply one connection with one browser
 io.on('connection', (socket) => {
+  var now = Date.now();
   console.log('socket connection is open')
+
+  if (now % 2 == 0) {
+    console.log('joining even');
+    socket.join('even');
+  } else {
+    console.log('joining odd');
+    socket.join('odd');
+  }
 
   // Whenever we get a socketping, send back a socketpong
   socket.on('socketping', () => {
@@ -23,7 +32,31 @@ io.on('connection', (socket) => {
     console.log(name + ' says hello');
     io.emit('name', name);
   });
+
+  socket.on('room.join', (room) =>{
+    console.log(socket.rooms);
+    Object.keys(socket.rooms).filter((r) => r != socket.id).forEach((r) => socket.leave(r));
+
+    setTimeout(() => {
+      socket.join(room);
+      socket.emit('event', 'Joined room ' + room);
+      socket.broadcast.to(room).emit('event', 'Someone joined room ' + room);
+    }, 0);
+
+    socket.on('event', (e) => {
+      socket.broadcast.to(e.room).emit('event', e.name + ' says good day!');
+    });
+  });
+
+  io.to('even').emit('odd/even', 'Even Room: ' + now);
+  io.to('odd').emit('odd/even', 'Odd Room: ' + now);
+
+  setTimeout(() =>{
+    io.to('even').emit('odd/even', 'Even Room: ' + now);
+    io.to('odd').emit('odd/even', 'Odd Room: ' + now);
+  }, 5000);
 });
+
 server.listen(3002);
 
 client.set('redis_connections', '0');
@@ -31,6 +64,10 @@ client.set('redis_connections', '0');
 // subscribe
 sub.on("message", function (channel, message) {
     console.log("sub channel " + channel + ": " + message);
+});
+
+sub.on('event', function(channel, message) {
+  console.log('Got event from ' + channel + ': ' + message);
 });
 
 sub.subscribe('requests');

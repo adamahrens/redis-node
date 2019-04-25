@@ -52,6 +52,51 @@
         document.getElementById('names').appendChild(li);
       });
     </script>
+
+    <h1>Odd or Even</h1>
+    <ul id="which">
+
+    </ul>
+    <script>
+      var socket = io({transports: ['websocket'], upgrade: false});
+      socket.on('odd/even', (e) => {
+        console.log('got a odd/even emit');
+        var li = document.createElement('li');
+        li.appendChild(document.createTextNode(e));
+        document.getElementById('which').appendChild(li);
+      });
+    </script>
+    <hr />
+    <h1>Rooms</h1>
+    <label for="username">Name</label>
+    <input id="username" type="text" placeholder="Enter your name" />
+    <button id="send_username" type="button" name="button">Say Hello</button>
+    <hr />
+    <label for="room">Room</label>
+    <input id="room" type="text" placeholder="Enter room to join" />
+    <button id="send_room" type="button" name="button">Join Room</button>
+    <ul id="rooms">
+    </ul>
+      <script>
+        var socket = io({transports: ['websocket'], upgrade: false});
+        document.getElementById('send_room').addEventListener('click', (e) => {
+          console.log('send room clicked');
+          socket.emit('room.join', document.getElementById('room').value);
+        });
+
+        document.getElementById('send_username').addEventListener('click', (e) => {
+          console.log('send username clicked');
+          socket.emit('event', {name: document.getElementById('username').value,
+                                room: document.getElementById('room').value});
+        });
+
+        socket.on('event', (e) => {
+          console.log('got a event emit');
+          var li = document.createElement('li');
+          li.appendChild(document.createTextNode(e));
+          document.getElementById('rooms').appendChild(li);
+        });
+      </script>
   </main>
 
   <footer>
